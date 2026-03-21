@@ -3,7 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tōdai - Your Focus Sanctuary</title>
+    <title>Tōdai - Your Focus Sanctuary | Study Timer & Productivity App</title>
+    <meta name="description" content="Tōdai is a free online study focus app with Pomodoro timer, todo lists, AI-powered flashcards, practice questions, and doubt clearing. Boost your productivity and focus on studies.">
+    <meta name="keywords" content="study focus, pomodoro timer, productivity app, study timer, focus app, study planner, flashcards, practice questions, AI study, online study tool, concentration, distraction-free study">
+    <meta name="author" content="Tōdai">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <link rel="canonical" href="https://todai-3p2e.onrender.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://todai-3p2e.onrender.com/">
+    <meta property="og:title" content="Tōdai - Your Focus Sanctuary | Study Timer & Productivity App">
+    <meta property="og:description" content="Free online study focus app with Pomodoro timer, todo lists, AI flashcards, practice questions, and doubt clearing. Boost your productivity today!">
+    <meta property="og:site_name" content="Tōdai">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://todai-3p2e.onrender.com/">
+    <meta name="twitter:title" content="Tōdai - Your Focus Sanctuary | Study Timer & Productivity App">
+    <meta name="twitter:description" content="Free online study focus app with Pomodoro timer, AI flashcards, practice questions, and doubt clearing. Boost your productivity!">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Tōdai",
+        "alternateName": "Todai Study Focus",
+        "url": "https://todai-3p2e.onrender.com/",
+        "description": "A free online study focus app with Pomodoro timer, todo lists, AI-powered flashcards, practice questions, and doubt clearing features to boost productivity.",
+        "applicationCategory": "EducationApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "keywords": "study focus, pomodoro timer, productivity, flashcards, practice questions, AI study tool, concentration",
+        "featureList": [
+            "Pomodoro Timer",
+            "Todo Lists",
+            "AI Flashcards",
+            "Practice Questions",
+            "Doubt Clearing",
+            "Focus Music",
+            "Calendar Integration",
+            "Statistics Dashboard"
+        ]
+    }
+    </script>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1434,6 +1487,19 @@
             border-color: var(--accent-primary);
             color: white;
         }
+        
+        /* Screen reader only - SEO & Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
 </head>
 <body>
@@ -1463,6 +1529,7 @@
             </div>
         </header>
         <main class="dashboard" id="dashboard">
+            <h1 class="sr-only">Tōdai - Free Study Focus & Productivity App with Pomodoro Timer, AI Flashcards, Practice Questions, and Doubt Clearing</h1>
             <div class="widget glass timer-widget" id="timerWidget">
                 <div class="greeting" id="greeting">Good morning, Focus Master</div>
                 <div class="quote-display" id="quoteDisplay" style="position: relative; padding-right: 30px;">
