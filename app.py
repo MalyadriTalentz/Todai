@@ -232,11 +232,13 @@ def serve_static(filename):
 
 @app.route('/sitemap.xml')
 def serve_sitemap():
-    return send_from_directory('.', 'sitemap.xml', mimetype='application/xml')
+    static_folder = app.static_folder or 'static'
+    return send_from_directory(static_folder, 'sitemap.xml', mimetype='application/xml')
 
 @app.route('/robots.txt')
 def serve_robots():
-    return send_from_directory('.', 'robots.txt', mimetype='text/plain')
+    static_folder = app.static_folder or 'static'
+    return send_from_directory(static_folder, 'robots.txt', mimetype='text/plain')
 
 # API Routes
 
