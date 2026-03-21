@@ -230,6 +230,14 @@ def index():
 def serve_static(filename):
     return send_from_directory('static', filename)
 
+@app.route('/sitemap.xml')
+def serve_sitemap():
+    return send_from_directory('.', 'sitemap.xml', mimetype='application/xml')
+
+@app.route('/robots.txt')
+def serve_robots():
+    return send_from_directory('.', 'robots.txt', mimetype='text/plain')
+
 # API Routes
 
 @app.route('/api/user/settings', methods=['GET', 'POST'])
