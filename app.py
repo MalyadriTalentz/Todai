@@ -966,5 +966,92 @@ Suggest optimal break duration and tips. Respond in JSON:
             'tips': ['Stretch', 'Hydrate']
         })
 
+NON_EDUCATIONAL_KEYWORDS = [
+    'bomb', 'weapon', 'drug', 'hack', 'steal', 'crime', 'murder', 'attack',
+    'pornography', 'explicit', 'violence', 'harmful', 'illegal', 'fraud',
+    'discrimination', 'hate', 'extremism', 'terrorism', 'suicide', 'self-harm'
+]
+
+@app.route('/api/doubt/explain', methods=['POST'])
+def explain_doubt():
+    if not AI_AVAILABLE or groq_client is None:
+        return jsonify({'error': 'AI service is not available', 'explanation': ''}), 500
+    
+    data = request.json or {}
+    question = data.get('question', '').strip()
+    mode = data.get('mode', 'normal')
+    
+    if not question:
+        return jsonify({'error': 'Please enter your question', 'explanation': ''}), 400
+    
+    question_lower = question.lower()
+    for keyword in NON_EDUCATIONAL_KEYWORDS:
+        if keyword in question_lower:
+            return jsonify({
+                'error': 'This question does not appear to be educational or study-related.',
+                'explanation': 'Please ask questions about subjects like Math, Science, History, Literature, or other academic topics.'
+            }), 400
+    
+    try:
+        if mode == 'baby':
+            system_prompt = """You are a knowledgeable and patient teacher explaining concepts to someone who has absolutely zero prior knowledge of the topic.
+Start from the absolute basics - define every term you use on first mention.
+Build understanding step by step, connecting new concepts to simple, universal ideas everyone can understand.
+Use clear analogies from everyday life rather than jargon.
+Be thorough but not condescending - treat the learner as an intelligent adult who simply hasn't encountered this subject before.
+Include the "why" behind things, not just the "what".
+Keep explanations concise but complete - aim for 2-3 well-crafted paragraphs that leave the learner with genuine understanding."""
+            user_prompt = f"""Please explain this concept to someone who knows absolutely nothing about this topic. 
+Assume they are an intelligent beginner with no background in this area whatsoever:
+
+{question}
+
+Start with the absolute basics, define any technical terms, and build up understanding step by step."""
+        else:
+            system_prompt = """You are a concise, expert tutor. Give clear, precise, and to-the-point explanations.
+Get straight to the answer without fluff. Use technical terms appropriately.
+Be direct but still helpful. Aim for short, impactful responses.
+If explaining a concept, give the core definition first, then key details."""
+            user_prompt = f"""Explain this concisely and precisely:
+
+{question}
+
+Give a clear, direct answer. Keep it brief but informative."""
+        
+        chat_completion = groq_client.chat.completions.create(
+            messages=[{
+                "role": "system",
+                "content": system_prompt
+            }, {
+                "role": "user",
+                "content": user_prompt
+            }],
+            model="llama-3.3-70b-versatile",
+            temperature=0.7,
+            max_tokens=800
+        )
+        
+        response_text = chat_completion.choices[0].message.content if chat_completion.choices else None
+        
+        if response_text:
+            return jsonify({
+                'question': question,
+                'explanation': response_text.strip(),
+                'mode': mode,
+                'error': None
+            })
+        else:
+            return jsonify({
+                'error': 'Could not generate explanation',
+                'explanation': '',
+                'question': question
+            }), 500
+            
+    except Exception as e:
+        return jsonify({
+            'error': f'Error generating explanation: {str(e)}',
+            'explanation': ''
+        }), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="nGTCp4vj72znpMq4AqNBF9kMEmzCanI5GJ9dco3WUvs" />
     <title>Tōdai - Your Focus Sanctuary</title>
     
     <!-- Fonts -->
@@ -1042,13 +1041,14 @@
             .dashboard { grid-template-columns: repeat(8, 1fr); }
             .timer-widget { grid-column: span 4; }
             .todo-widget { grid-column: span 4; }
-            .stats-widget, .music-widget, .settings-widget { grid-column: span 4; }
+            .stats-widget, .music-widget, .flashcard-widget, .pyq-widget, .doubt-widget, .settings-widget { grid-column: span 4; }
         }
         @media (max-width: 1024px) {
             .dashboard { grid-template-columns: repeat(4, 1fr); }
             .timer-widget { grid-column: span 4; }
             .todo-widget { grid-column: span 4; max-height: none; }
             .stats-widget, .music-widget, .settings-widget { grid-column: span 2; }
+            .flashcard-widget, .pyq-widget, .doubt-widget { grid-column: span 2; }
             .timer-display { font-size: 4rem; }
         }
         
@@ -1102,7 +1102,7 @@
         @media (max-width: 768px) {
             .app-container { padding: 1rem; }
             .dashboard { grid-template-columns: 1fr; gap: 1rem; }
-            .timer-widget, .todo-widget, .stats-widget, .music-widget, .flashcard-widget, .pyq-widget, .settings-widget { grid-column: span 1; }
+            .timer-widget, .todo-widget, .stats-widget, .music-widget, .flashcard-widget, .pyq-widget, .doubt-widget, .settings-widget { grid-column: span 1; }
             .timer-display { font-size: 3.5rem; }
             .timer-modes { flex-wrap: wrap; justify-content: center; }
             .header-controls { gap: 0.5rem; }
@@ -1224,6 +1224,215 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Doubt Widget Styles */
+        .doubt-widget {
+            grid-column: span 4;
+            display: flex;
+            flex-direction: column;
+            min-height: 350px;
+        }
+        .doubt-widget .widget-header {
+            align-items: flex-start;
+            justify-content: flex-start;
+            margin-bottom: 0.5rem;
+            flex-shrink: 0;
+        }
+        .doubt-widget .widget-title {
+            font-size: 1.25rem;
+        }
+        .doubt-input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+        .doubt-input {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 2px solid var(--glass-border);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: none;
+            min-height: 80px;
+            font-family: inherit;
+        }
+        .doubt-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: var(--bg-tertiary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        .doubt-input::placeholder {
+            color: var(--text-muted);
+        }
+        .doubt-ask-btn {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        .doubt-ask-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+        .doubt-ask-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .doubt-response {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            flex: 1;
+            animation: fadeIn 0.4s ease;
+        }
+        .doubt-response.active {
+            display: flex;
+        }
+        .doubt-question-display {
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-primary);
+        }
+        .doubt-question-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .doubt-question-text {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .doubt-explanation {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+        .doubt-explanation-label {
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .doubt-explanation-text {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .doubt-controls {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+        .doubt-loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex: 1;
+            padding: 2rem;
+        }
+        .doubt-loading.active {
+            display: flex;
+        }
+        .doubt-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--bg-secondary);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .doubt-loading-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .doubt-error {
+            display: none;
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--accent-danger);
+            border-radius: 12px;
+            color: var(--accent-danger);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .doubt-error.active {
+            display: block;
+        }
+        .doubt-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .doubt-info i {
+            color: var(--accent-primary);
+        }
+        .doubt-mode-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .doubt-mode-btn {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .doubt-mode-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+        .doubt-mode-btn.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
         }
     </style>
 </head>
@@ -1493,6 +1702,55 @@
                 </div>
             </div>
 
+            <!-- Doubt Widget -->
+            <div class="widget glass doubt-widget" id="doubtWidget">
+                <div class="widget-header">
+                    <div class="widget-title"><i class="fas fa-question-circle"></i> Ask a Doubt</div>
+                </div>
+                <div class="doubt-input-section" id="doubtInputSection">
+                    <div class="doubt-info">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Ask any topic and get a clear explanation!</span>
+                    </div>
+                    <div class="doubt-mode-selector">
+                        <button class="doubt-mode-btn active" id="doubtNormalBtn" onclick="DoubtWidget.setMode('normal')">
+                            <i class="fas fa-bolt"></i> Normal
+                        </button>
+                        <button class="doubt-mode-btn" id="doubtBabyBtn" onclick="DoubtWidget.setMode('baby')">
+                            <i class="fas fa-seedling"></i> Beginner
+                        </button>
+                    </div>
+                    <textarea id="doubtQuestion" class="doubt-input" placeholder="Type your question here... (e.g., What is quantum entanglement?)" rows="3"></textarea>
+                    <button class="doubt-ask-btn" id="doubtAskBtn" onclick="DoubtWidget.askQuestion()">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Explain This to Me</span>
+                    </button>
+                </div>
+                <div class="doubt-loading" id="doubtLoading">
+                    <div class="doubt-spinner"></div>
+                    <div class="doubt-loading-text">Explaining from the basics...</div>
+                </div>
+                <div class="doubt-response" id="doubtResponse">
+                    <div class="doubt-question-display">
+                        <div class="doubt-question-label">Your Question</div>
+                        <div class="doubt-question-text" id="doubtQuestionDisplay"></div>
+                    </div>
+                    <div class="doubt-explanation">
+                        <div class="doubt-explanation-label">
+                            <i class="fas fa-book-open"></i>
+                            Beginner-Friendly Explanation
+                        </div>
+                        <div class="doubt-explanation-text" id="doubtExplanationText"></div>
+                    </div>
+                    <div class="doubt-controls">
+                        <button class="mode-btn" onclick="DoubtWidget.askNewQuestion()">
+                            <i class="fas fa-plus"></i> Ask Another Question
+                        </button>
+                    </div>
+                </div>
+                <div class="doubt-error" id="doubtError"></div>
+            </div>
+
             <!-- Calendar Widget -->
             <div class="widget glass calendar-widget" id="calendarWidget">
                 <div class="calendar-main-layout">
@@ -1593,6 +1851,14 @@
                     </div>
                     <div class="setting-item">
                         <div class="setting-info">
+                            <span class="setting-name">Show Ask a Doubt</span>
+                            <span class="setting-desc">Get simple explanations for any topic</span>
+                        </div>
+                        <input type="checkbox" id="toggleDoubtWidget" style="display:none;" checked>
+                        <div class="toggle active" id="doubtToggleWidget" onclick="app.toggleSetting('toggleDoubtWidget')"><div class="toggle-slider"></div></div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
                             <span class="setting-name">Show Calendar</span>
                             <span class="setting-desc">Display calendar and planner</span>
                         </div>
@@ -1634,6 +1900,11 @@
                             <i class="fas fa-grip-lines" style="color: var(--text-muted); margin-right: 0.75rem;"></i>
                             <i class="fas fa-file-alt" style="color: var(--accent-danger); margin-right: 0.5rem;"></i>
                             <span>Practice Questions</span>
+                        </div>
+                        <div class="widget-order-item" data-widget="doubtWidget">
+                            <i class="fas fa-grip-lines" style="color: var(--text-muted); margin-right: 0.75rem;"></i>
+                            <i class="fas fa-question-circle" style="color: var(--accent-warning); margin-right: 0.5rem;"></i>
+                            <span>Ask a Doubt</span>
                         </div>
                         <div class="widget-order-item" data-widget="calendarWidget" style="background: rgba(139, 92, 246, 0.1); border: 1px dashed var(--accent-primary);">
                             <i class="fas fa-grip-lines" style="color: var(--text-muted); margin-right: 0.75rem;"></i>
@@ -1807,10 +2078,11 @@
                 showQuotes: true,
                 showFlashcards: true,
                 showPYQ: true,
+                showDoubt: true,
                 showCalendar: true,
                 timerDuration: 25,
                 breakDuration: 5,
-                widgetOrder: ['timerWidget', 'todoWidget', 'statsWidget', 'musicWidget', 'flashcardWidget', 'pyqWidget', 'calendarWidget']
+                widgetOrder: ['timerWidget', 'todoWidget', 'statsWidget', 'musicWidget', 'flashcardWidget', 'pyqWidget', 'doubtWidget', 'calendarWidget']
             },
             timer: {
                 isRunning: false,
@@ -4069,6 +4341,109 @@
             },
         };
 
+        // Doubt Widget Module
+        const DoubtWidget = {
+            isLoading: false,
+            currentMode: 'normal',
+            
+            init() {
+                const input = document.getElementById('doubtQuestion');
+                if (input) {
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            this.askQuestion();
+                        }
+                    });
+                }
+            },
+            
+            setMode(mode) {
+                this.currentMode = mode;
+                document.getElementById('doubtNormalBtn').classList.toggle('active', mode === 'normal');
+                document.getElementById('doubtBabyBtn').classList.toggle('active', mode === 'baby');
+            },
+            
+            async askQuestion() {
+                if (this.isLoading) return;
+                
+                const question = document.getElementById('doubtQuestion').value.trim();
+                
+                if (!question) {
+                    Utils.showToast('Please enter your question', 'error');
+                    return;
+                }
+                
+                this.showLoading();
+                
+                try {
+                    const response = await fetch('/api/doubt/explain', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ question, mode: this.currentMode })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Failed to get explanation');
+                    }
+                    
+                    this.showResponse(question, data.explanation);
+                    Utils.showToast('Explanation ready!', 'success');
+                    
+                } catch (error) {
+                    console.error('Error asking doubt:', error);
+                    this.showError(error.message || 'Failed to get explanation. Please try again.');
+                }
+            },
+            
+            showLoading() {
+                this.isLoading = true;
+                document.getElementById('doubtInputSection').style.display = 'none';
+                document.getElementById('doubtResponse').classList.remove('active');
+                document.getElementById('doubtError').classList.remove('active');
+                document.getElementById('doubtLoading').classList.add('active');
+                
+                const btn = document.getElementById('doubtAskBtn');
+                if (btn) btn.disabled = true;
+            },
+            
+            showResponse(question, explanation) {
+                this.isLoading = false;
+                document.getElementById('doubtLoading').classList.remove('active');
+                document.getElementById('doubtInputSection').style.display = 'none';
+                document.getElementById('doubtError').classList.remove('active');
+                document.getElementById('doubtQuestionDisplay').textContent = question;
+                document.getElementById('doubtExplanationText').textContent = explanation;
+                document.getElementById('doubtResponse').classList.add('active');
+                
+                const btn = document.getElementById('doubtAskBtn');
+                if (btn) btn.disabled = false;
+            },
+            
+            showError(message) {
+                this.isLoading = false;
+                document.getElementById('doubtLoading').classList.remove('active');
+                document.getElementById('doubtResponse').classList.remove('active');
+                document.getElementById('doubtInputSection').style.display = 'flex';
+                document.getElementById('doubtError').textContent = message;
+                document.getElementById('doubtError').classList.add('active');
+                
+                const btn = document.getElementById('doubtAskBtn');
+                if (btn) btn.disabled = false;
+            },
+            
+            askNewQuestion() {
+                document.getElementById('doubtResponse').classList.remove('active');
+                document.getElementById('doubtInputSection').style.display = 'flex';
+                document.getElementById('doubtQuestion').value = '';
+                document.getElementById('doubtQuestion').focus();
+            }
+        };
+
         // Settings Module
         const Settings = {
             init() {
@@ -4316,6 +4691,7 @@
                     'musicWidget': AppState.settings.showSpotify,
                     'flashcardWidget': AppState.settings.showFlashcards,
                     'pyqWidget': AppState.settings.showPYQ,
+                    'doubtWidget': AppState.settings.showDoubt,
                     'calendarWidget': AppState.settings.showCalendar,
                     'timerWidget': true // Timer always visible, but quote inside can be hidden
                 };
@@ -4554,6 +4930,7 @@
                     Calendar.init();
                     FlashcardWidget.init();
                     PYQWidget.init();
+                    DoubtWidget.init();
                     Settings.init();
                     
                     // Apply widget order after all widgets are rendered
@@ -4660,7 +5037,7 @@
                         Settings.open();
                     }
                     
-                    if (e.key === ' ' && e.target.tagName !== 'INPUT') {
+                    if (e.key === ' ' && !['INPUT', 'TEXTAREA'].includes(e.target.tagName) && !e.target.isContentEditable) {
                         e.preventDefault();
                         Timer.toggle();
                     }
@@ -4791,6 +5168,7 @@
                         'toggleFlashcardWidget': 'showFlashcards',
                         'togglePYQ': 'showPYQ',
                         'togglePYQWidget': 'showPYQ',
+                        'toggleDoubtWidget': 'showDoubt',
                         'toggleCalendar': 'showCalendar',
                         'toggleCalendarWidget': 'showCalendar'
                     };
@@ -4853,6 +5231,7 @@
         window.Calendar = Calendar;
         window.FlashcardWidget = FlashcardWidget;
         window.PYQWidget = PYQWidget;
+        window.DoubtWidget = DoubtWidget;
         
         // Scroll to settings widget function
         window.scrollToSettings = function() {
