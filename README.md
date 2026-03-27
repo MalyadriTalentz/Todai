@@ -11,6 +11,6 @@ A comprehensive study dashboard with AI-powered features.
 - Quotes
 - AI Doubt Solver.
 
-© 2026 Malyadri Chowdary Marneni. All rights reserved. No part of this project may be copied, distributed, or used without express written permission.
+© 2026 Malyadri Chowdary Marneni. All rights reserved. No part of this project may be copied, distributed, or plagiarised without express written permission.
 
 
